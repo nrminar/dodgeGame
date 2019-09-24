@@ -47,6 +47,9 @@ function setup() {
         addLayer(800,300);
    }
    play = new player(0,0);
+   for(let i=0; i<8; i++){
+        lines.push(new closeLine(100, 100));
+   }
    setInterval(addLayer,1000);
 }
 function draw() {
@@ -57,13 +60,10 @@ function draw() {
         comet.collide(play);
         comet.show();
         comet.update();
-        // findMin(comet);
-        // stroke(0);
-        // fill(0);
-        // line(play.pos.x, play.pos.y, comet.pos.x, comet.pos.y);
     }
-    for(let line of lines){
-        
+    for(let i=0; i<lines.length; i++){
+        lines[i].update(i);
+        lines[i].show();
     }
     text(layer.length, 50, 50)
  }
@@ -123,16 +123,13 @@ class player{
         if(keyIsDown(DOWN_ARROW)){
             play.pos.y += 5;
         }
-        // for(let i=0; i<layer.length; i++){
-        //     findMin(layer[i]);
-        // }
         layer.sort(compare);
+        console.log('output layer:', layer);
     }
 }
 class closeLine{
     constructor(x, y){
         this.pos = createVector(x, y)
-        this.distance = dist(play.pos.x, play.pos.y, this.pos.x, this.pos.y);
     }
     show(){
         stroke(0);
@@ -140,7 +137,7 @@ class closeLine{
         line(play.pos.x, play.pos.y, this.pos.x, this.pos.y);
     }
     update(index){
-        let close = closestGroup[index];
+        let close = layer[index];
         this.pos.x = close.pos.x;
         this.pos.y = close.pos.y;
     }
